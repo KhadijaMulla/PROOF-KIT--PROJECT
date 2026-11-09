@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ProofKit — Verify the offer before you trust it</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b1a;--bg2:#0d1430;--card:rgba(255,255,255,.04);--line:rgba(255,255,255,.1);--tx:#eef2ff;--mu:#9aa6c7;--cy:#22d3ee;--bl:#3b82f6;--pu:#8b5cf6;--rd:#f87171;--am:#fbbf24;--gn:#34d399}
+*{box-sizing:border-box;margin:0}html{scroll-behavior:smooth}
+body{font:16px/1.6 'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;background:radial-gradient(600px 400px at 85% 5%,rgba(139,92,246,.22),transparent),radial-gradient(700px 500px at 10% 30%,rgba(34,211,238,.1),transparent);pointer-events:none;z-index:-1}
+a{color:var(--cy)}svg.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.w{max-width:1160px;margin:auto;padding:0 22px}section{padding:84px 0}
+h1{font-size:clamp(2.2rem,5vw,3.7rem);line-height:1.08;letter-spacing:-.03em;font-weight:800}h2{font-size:clamp(1.7rem,3.4vw,2.5rem);letter-spacing:-.02em;line-height:1.15;font-weight:800}h3{font-size:1.05rem}
+.mu{color:var(--mu)}.sh{max-width:640px;margin-bottom:34px}.sh p{margin-top:10px;color:var(--mu)}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);color:var(--tx);padding:11px 20px;border-radius:12px;font:600 .95rem inherit;font-family:inherit;cursor:pointer;text-decoration:none;transition:.2s}
+.btn:hover{border-color:var(--cy);transform:translateY(-1px)}.btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+.pri{background:linear-gradient(135deg,var(--bl),var(--pu));border:0;box-shadow:0 8px 28px rgba(59,130,246,.35)}.pri:hover{box-shadow:0 10px 34px rgba(139,92,246,.55)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(7,11,26,.72);border-bottom:1px solid var(--line)}
+nav .w{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}.logo{display:flex;gap:9px;align-items:center;font-weight:800;letter-spacing:.04em;color:var(--tx);text-decoration:none}.logo svg{width:28px;height:28px}
+.links{display:flex;gap:24px;align-items:center}.links a{color:var(--mu);text-decoration:none;font-size:.92rem}.links a:hover{color:var(--tx)}.links a.btn{color:var(--tx)}.burger{display:none}
+.hero{padding:70px 0 40px}.hero .w{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}.hero p{margin:20px 0 28px;color:var(--mu);font-size:1.1rem;max-width:520px}.cta{display:flex;gap:12px;flex-wrap:wrap}
+.vis{position:relative;aspect-ratio:1;max-width:440px;margin:auto;width:100%}.vis svg{width:100%;height:100%}.fl{position:absolute;background:rgba(13,20,48,.85);border:1px solid var(--line);border-radius:12px;padding:9px 13px;font-size:.8rem;display:flex;gap:8px;align-items:center;backdrop-filter:blur(8px);animation:fy 5s ease-in-out infinite}
+.fl.a{top:8%;left:-4%;color:var(--rd)}.fl.b{bottom:12%;right:-2%;color:var(--gn);animation-delay:-2s}@keyframes fy{50%{transform:translateY(-10px)}}
+.ring{transform-origin:200px 200px;animation:sp 24s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.stats{display:flex;gap:34px;margin-top:34px;flex-wrap:wrap}.stats b{font-size:1.6rem;display:block}.stats span{font-size:.8rem;color:var(--mu)}
+.tabs{display:flex;gap:6px;background:rgba(255,255,255,.04);padding:5px;border-radius:14px;width:fit-content;max-width:100%;overflow:auto;margin-bottom:18px}
+.tabs button{background:0;border:0;color:var(--mu);padding:9px 16px;border-radius:10px;font:600 .9rem inherit;font-family:inherit;cursor:pointer;white-space:nowrap}.tabs button.on{background:linear-gradient(135deg,var(--bl),var(--pu));color:#fff}
+textarea,input[type=text],input[type=url],input[type=email],input[type=password],select{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--tx);border-radius:12px;padding:14px;font:inherit;font-size:.95rem}textarea{min-height:200px;resize:vertical}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;justify-content:space-between}.drop{border:2px dashed var(--line);border-radius:16px;padding:40px 20px;text-align:center;cursor:pointer;transition:.2s}.drop:hover,.drop.dg{border-color:var(--cy);background:rgba(34,211,238,.05)}
+.bar{height:6px;background:rgba(255,255,255,.08);border-radius:9px;overflow:hidden;margin-top:14px}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cy),var(--pu));transition:width .3s}
+.hide{display:none!important}.scan{text-align:center;padding:30px 0}.scan ul{list-style:none;padding:0;max-width:340px;margin:20px auto 0;text-align:left}.scan li{padding:7px 0;color:var(--mu);display:flex;gap:10px;align-items:center}.scan li.on{color:var(--cy)}.scan li.ok{color:var(--gn)}
+.sline{height:3px;background:linear-gradient(90deg,transparent,var(--cy),transparent);animation:ln 1.2s ease-in-out infinite;margin-top:10px}@keyframes ln{0%,100%{transform:scaleX(.2)}50%{transform:scaleX(1)}}
+.res{display:grid;grid-template-columns:260px 1fr;gap:24px}.gauge{text-align:center}.gauge svg{width:190px;height:190px}.gauge text{fill:var(--tx);font-weight:800}
+.pill{display:inline-block;padding:4px 12px;border-radius:99px;font-size:.8rem;font-weight:700}.p-r{background:rgba(248,113,113,.15);color:var(--rd)}.p-a{background:rgba(251,191,36,.15);color:var(--am)}.p-g{background:rgba(52,211,153,.15);color:var(--gn)}
+details{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;margin-top:10px}summary{padding:14px 16px;cursor:pointer;display:flex;gap:10px;align-items:center;font-weight:600;list-style:none}summary svg{color:var(--am)}details[open]{border-color:rgba(248,113,113,.4)}details div{padding:0 16px 16px;color:var(--mu);font-size:.92rem}details q{display:block;margin-top:8px;padding:8px 12px;background:rgba(0,0,0,.3);border-left:3px solid var(--rd);border-radius:6px;color:var(--tx);quotes:none;font-size:.85rem;word-break:break-word}
+.demo{display:inline-flex;gap:8px;align-items:center;font-size:.78rem;color:var(--am);border:1px solid rgba(251,191,36,.35);padding:4px 12px;border-radius:99px;margin-bottom:14px}
+.grid{display:grid;gap:16px}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
+.feat{transition:.25s}.feat:hover{transform:translateY(-4px);border-color:rgba(34,211,238,.4)}.feat .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(59,130,246,.25),rgba(139,92,246,.25));color:var(--cy);margin-bottom:14px}.feat p{color:var(--mu);font-size:.88rem;margin-top:6px}
+.vr{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.92rem;flex-wrap:wrap}.vr:last-child{border:0}.st{font-weight:700;font-size:.8rem}.st.Verified{color:var(--gn)}.st.Mismatch{color:var(--rd)}.st.Unavailable{color:var(--mu)}.st.NeedsReview{color:var(--am)}
+.steps{counter-reset:s;position:relative}.step{position:relative;padding-top:56px}.step:before{counter-increment:s;content:counter(s);position:absolute;top:0;left:24px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--bl),var(--pu));font-weight:800}.step:after{content:"";position:absolute;top:18px;left:70px;right:-16px;height:2px;background:linear-gradient(90deg,var(--cy),transparent)}.step:last-child:after{display:none}.step p{color:var(--mu);font-size:.9rem;margin-top:6px}
+.filters{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}.filters input{flex:1;min-width:200px}.filters select{width:auto}.tag{font-size:.75rem;color:var(--cy);background:rgba(34,211,238,.1);padding:3px 10px;border-radius:99px}.cnt{color:var(--mu);font-size:.8rem}.sc code{display:block;margin:10px 0;color:var(--am);word-break:break-all;font-size:.85rem}
+.sos{border-color:rgba(248,113,113,.4);background:linear-gradient(135deg,rgba(248,113,113,.1),rgba(139,92,246,.08))}.sos b{font-size:2.2rem;display:block}
+.modal{position:fixed;inset:0;background:rgba(3,6,16,.75);backdrop-filter:blur(6px);display:grid;place-items:center;z-index:100;padding:18px;opacity:0;pointer-events:none;transition:.25s}.modal.on{opacity:1;pointer-events:auto}.modal .card{background:var(--bg2);width:100%;max-width:520px;max-height:92vh;overflow:auto;transform:translateY(20px);transition:.25s}.modal.on .card{transform:none}.modal label{display:block;font-size:.85rem;color:var(--mu);margin:12px 0 5px}
+#toasts{position:fixed;bottom:20px;right:20px;z-index:200;display:grid;gap:8px}.toast{background:var(--bg2);border:1px solid var(--cy);padding:12px 18px;border-radius:12px;animation:ti .3s;max-width:320px;font-size:.9rem}@keyframes ti{from{opacity:0;transform:translateX(30px)}}
+footer{border-top:1px solid var(--line);padding:50px 0 30px;margin-top:30px}footer .grid{grid-template-columns:1.6fr 1fr 1fr 1fr}footer a{display:block;color:var(--mu);text-decoration:none;font-size:.9rem;padding:3px 0}footer a:hover{color:var(--tx)}footer h4{margin-bottom:8px;font-size:.9rem}
+.rv{opacity:0;transform:translateY(18px);transition:.6s}.rv.in{opacity:1;transform:none}
+@media(max-width:900px){.hero .w,.res{grid-template-columns:1fr}.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr 1fr}.step:after{display:none}footer .grid{grid-template-columns:1fr 1fr}.links{position:absolute;top:68px;left:0;right:0;background:var(--bg2);flex-direction:column;padding:18px;display:none;border-bottom:1px solid var(--line);align-items:flex-start}.links.on{display:flex}.burger{display:inline-flex}.hd{display:none}}
+@media(max-width:560px){.g4,.g3,.g2{grid-template-columns:1fr}section{padding:60px 0}.fl.a{left:0}.fl.b{right:0}}
+.vis{display:grid;place-items:center;perspective:900px}.vis:before{content:"";position:absolute;inset:-10%;background:radial-gradient(circle,rgba(59,130,246,.35),transparent 65%);z-index:-1}
+.letter{position:relative;background:#f8f7f2;color:#1b2236;border-radius:14px;padding:22px 22px 30px;font-size:.74rem;line-height:1.55;box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.1);transform:rotate(-3deg);overflow:hidden;max-width:360px;transition:transform .15s}
+.letter h5{font-size:.98rem;color:#0a1a4a}.letter .hl{background:rgba(248,113,113,.3);border-bottom:2px solid #ef4444;padding:0 2px;border-radius:3px;animation:hl 3.4s infinite}@keyframes hl{50%{background:rgba(248,113,113,.6)}}
+.beam{position:absolute;left:0;right:0;height:50px;background:linear-gradient(180deg,transparent,rgba(34,211,238,.45));border-bottom:2px solid var(--cy);animation:bm 3.4s ease-in-out infinite}@keyframes bm{0%{top:-50px}100%{top:100%}}
+.stamp{position:absolute;right:14px;bottom:14px;border:3px solid #dc2626;color:#dc2626;font-weight:800;font-size:1rem;padding:2px 10px;border-radius:6px;animation:stp 3.4s infinite}@keyframes stp{0%,55%{opacity:0;transform:rotate(-12deg) scale(2.2)}70%,100%{opacity:1;transform:rotate(-12deg) scale(1)}}
+.mq{overflow:hidden;border-block:1px solid var(--line);padding:14px 0;white-space:nowrap;margin-top:30px}.mq div{display:inline-block;animation:mq 32s linear infinite;color:var(--mu)}.mq span{margin:0 26px}@keyframes mq{to{transform:translateX(-50%)}}
+/* ---------- auth pages (Login / Create account) ---------- */
+.authpage{display:none;grid-template-columns:1fr 1fr;min-height:calc(100vh - 68px)}body.auth .home{display:none!important}body.auth .authpage.on{display:grid}
+.authpage .side{padding:70px 48px;display:flex;flex-direction:column;justify-content:center;gap:18px;background:linear-gradient(160deg,rgba(59,130,246,.18),rgba(139,92,246,.18));border-right:1px solid var(--line)}
+.authpage .side h1{font-size:clamp(1.9rem,3.4vw,2.8rem)}.authpage .side ul{list-style:none;padding:0;display:grid;gap:12px;color:var(--mu)}.authpage .side li:before{content:"✓ ";color:var(--gn);font-weight:800}
+.authpage .main{display:grid;place-items:center;padding:40px 22px}.box{width:100%;max-width:420px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px}.box h2{font-size:1.6rem}.box .sub{margin:6px 0 10px;color:var(--mu);font-size:.92rem}
+.fld{margin-top:14px}.fld label{display:block;font-size:.85rem;color:var(--mu);margin-bottom:5px}input.bad{border-color:var(--rd)}.err{color:var(--rd);font-size:.78rem;min-height:1.1em;margin-top:4px}
+.pw{position:relative}.pw button{position:absolute;right:8px;top:9px;background:0;border:0;color:var(--mu);cursor:pointer;font:600 .8rem inherit;font-family:inherit;padding:6px}
+.meter{height:5px;border-radius:9px;background:rgba(255,255,255,.08);margin-top:8px;overflow:hidden}.meter i{display:block;height:100%;width:0;transition:.3s}
+.chk{display:flex;gap:8px;align-items:flex-start;margin-top:14px;font-size:.85rem;color:var(--mu)}.chk input{margin-top:4px}
+.amsg{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88rem;display:none}.amsg.on{display:block}.amsg.e{background:rgba(248,113,113,.12);color:var(--rd)}.amsg.o{background:rgba(52,211,153,.12);color:var(--gn)}
+.box .btn.pri{width:100%;justify-content:center;margin-top:18px}.box .btn[disabled]{opacity:.6;cursor:wait}.alt{text-align:center;margin-top:18px;font-size:.9rem;color:var(--mu)}
+@media(max-width:900px){.authpage{grid-template-columns:1fr}.authpage .side{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style></head><body>
+<nav><div class="w"><a class="logo" href="#home"><svg viewBox="0 0 32 32" fill="none"><path d="M16 2l12 4v9c0 8-5 13-12 15C9 28 4 23 4 15V6z" fill="url(#lg)"/><path d="M10.5 16l4 4 7-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="lg" x1="4" y1="2" x2="28" y2="30"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg>PROOFKIT</a>
+<div class="links" id="links"><a href="#home">Home</a><a href="#how">How It Works</a><a href="#features">Features</a><a href="#db">Scam Database</a><a href="#about">About</a><span id="na" style="display:contents"></span></div>
+<div style="display:flex;gap:8px"><a class="btn pri hd" id="gp" href="#signup">Get Protected</a><button class="btn burger" id="bg" aria-label="Menu" aria-expanded="false"><svg class="i" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button></div></div></nav>
+
+<!-- ===== LOGIN PAGE ===== -->
+<main class="authpage" id="pg-login"><aside class="side"><h1>Welcome back. Stay one step ahead of scammers.</h1><ul><li>Scan offers, letters and links</li><li>See the evidence behind every red flag</li><li>Get clear next steps if you were targeted</li></ul></aside>
+<div class="main"><form class="box" id="lf" novalidate><h2>Login</h2><p class="sub">Sign in to your ProofKit account.</p><div class="amsg" id="l-msg" role="alert"></div>
+<div class="fld"><label for="l-em">Email</label><input type="email" id="l-em" autocomplete="email"><div class="err" id="e-l-em"></div></div>
+<div class="fld"><label for="l-pw">Password</label><div class="pw"><input type="password" id="l-pw" autocomplete="current-password"><button type="button" data-pw>Show</button></div><div class="err" id="e-l-pw"></div></div>
+<label class="chk"><input type="checkbox" id="l-rm">Keep me signed in on this device</label>
+<button class="btn pri" id="l-go">Login</button><p class="alt">New to ProofKit? <a href="#signup">Create an account</a></p></form></div></main>
+
+<!-- ===== CREATE ACCOUNT PAGE ===== -->
+<main class="authpage" id="pg-signup"><aside class="side"><h1>Create your free account. Verify before you trust.</h1><ul><li>Protect yourself from fake internships</li><li>Save and download your risk reports</li><li>Help the community by reporting scams</li></ul></aside>
+<div class="main"><form class="box" id="sf" novalidate><h2>Create account</h2><p class="sub">It takes less than a minute.</p><div class="amsg" id="s-msg" role="alert"></div>
+<div class="fld"><label for="s-nm">Full name</label><input type="text" id="s-nm" autocomplete="name" maxlength="60"><div class="err" id="e-s-nm"></div></div>
+<div class="fld"><label for="s-em">Email</label><input type="email" id="s-em" autocomplete="email"><div class="err" id="e-s-em"></div></div>
+<div class="fld"><label for="s-pw">Password</label><div class="pw"><input type="password" id="s-pw" autocomplete="new-password"><button type="button" data-pw>Show</button></div><div class="meter"><i id="s-mt"></i></div><div class="err" id="e-s-pw"></div></div>
+<div class="fld"><label for="s-pc">Confirm password</label><input type="password" id="s-pc" autocomplete="new-password"><div class="err" id="e-s-pc"></div></div>
+<label class="chk"><input type="checkbox" id="s-tc">I understand ProofKit gives guidance, not legal advice.</label><div class="err" id="e-s-tc"></div>
+<button class="btn pri" id="s-go">Create account</button><p class="alt">Already registered? <a href="#login">Login</a></p></form></div></main>
+
+<header class="hero" id="home"><div class="w"><div>
+<h1>That dream job could be a scam. Verify before you trust.</h1>
+<p>Analyze job offers, internship messages and suspicious recruitment links before sharing your documents or paying a single rupee.</p>
+<div class="cta"><a class="btn pri" href="#scan">Scan an offer</a><a class="btn" href="#how">Explore how it works</a></div>
+<div class="stats"><div><b data-n="1999">0</b><span>₹ typical fake "registration fee"</span></div><div><b data-n="5">0</b><span>checks run on every offer</span></div><div><b data-n="1930">0</b><span>national cybercrime helpline</span></div></div></div>
+<div class="vis"><div class="letter"><div class="beam"></div><h5>TechNova Solutions Pvt Ltd</h5><div style="color:#667">Offer of Internship, Ref TN/2026/0457</div><p style="margin-top:8px">Dear Candidate, <span class="hl">you are selected without interview</span> for the Data Analyst role. Stipend: <span class="hl">₹25,000 per week</span>.</p><p style="margin-top:6px">To confirm your seat, pay a <span class="hl">registration fee of ₹1,999 within 24 hours</span>.</p><p style="margin-top:6px">Contact: <span class="hl">hr.technova@gmail.com</span></p><p style="margin-top:8px;color:#778;font-size:.65rem">Sample document for demonstration.</p><div class="stamp">LIKELY SCAM</div></div>
+<div class="fl a"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l10 18H2zM12 10v5M12 18h.01"/></svg>Fee requested before interview</div><div class="fl b"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>5 checks complete</div></div></div></header>
+<div class="w"><div class="mq" aria-hidden="true"><div id="mqi"></div></div></div>
+
+<section id="scan"><div class="w"><div class="sh rv"><h2>Verify before you apply.</h2><p>One suspicious message could cost you money. Let ProofKit help you investigate.</p></div>
+<div class="card rv"><div class="demo" id="demoTag"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Demo mode: local pattern checks, plus live DNS and RDAP domain lookups when your network allows. No government database is queried.</div>
+<div class="tabs" role="tablist"><button class="on" data-tab="m">Paste message</button><button data-tab="f">Upload offer letter</button><button data-tab="u">Check job URL</button></div>
+<div id="tm"><textarea id="msg" maxlength="3000" placeholder="Paste the offer here, e.g. &quot;Congratulations! You are selected for a Data Analyst internship at TechNova Solutions. Pay ₹1,999 registration fee within 24 hours to confirm. Contact hr.technova@gmail.com&quot;"></textarea>
+<div class="row"><span class="mu" id="cc">0 / 3000</span><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="sample">Try a sample scam</button><button class="btn" id="clr">Clear</button><button class="btn pri" id="go">Analyze offer</button></div></div></div>
+<div id="tf" class="hide"><div class="drop" id="drop" tabindex="0" role="button"><svg class="i" viewBox="0 0 24 24" style="width:34px;height:34px;color:var(--cy)"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg><p><b>Drop your offer letter here</b></p><p class="mu" style="font-size:.85rem">PDF, PNG or JPG, up to 5 MB. Or click to browse.</p><input type="file" id="file" accept=".pdf,.png,.jpg,.jpeg" hidden></div><div class="bar hide" id="ub"><i></i></div><div class="row"><span id="fn" class="mu">No file selected</span><button class="btn pri" id="gof">Analyze document</button></div></div>
+<div id="tu" class="hide"><input type="url" id="url" placeholder="https://careers.example.com/apply"><div class="row"><span class="mu" style="font-size:.85rem">Checks URL structure only in demo mode.</span><button class="btn pri" id="gou">Validate URL</button></div></div>
+<div id="sc" class="scan hide"><h3>Investigating offer</h3><div class="sline"></div><ul id="stg"></ul></div></div>
+
+<div id="out" class="hide" style="margin-top:24px"><div class="card res"><div class="gauge"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" fill="none" stroke="#ffffff14" stroke-width="14"/><circle id="arc" cx="100" cy="100" r="84" fill="none" stroke="var(--rd)" stroke-width="14" stroke-linecap="round" stroke-dasharray="528" stroke-dashoffset="528" transform="rotate(-90 100 100)" style="transition:stroke-dashoffset 1.4s ease"/><text id="sn" x="100" y="108" text-anchor="middle" font-size="44">0</text><text x="100" y="132" text-anchor="middle" font-size="12" style="fill:var(--mu);font-weight:500">out of 100</text></svg><span id="cl" class="pill"></span></div>
+<div><div class="demo">Demonstration analysis. Not a verification against real databases.</div><h3 id="rs"></h3><p class="mu" id="rsum" style="margin:6px 0 14px"></p><h3>Why did ProofKit flag this offer?</h3><div id="flags"></div>
+<div class="row" style="justify-content:flex-start"><button class="btn" id="dl">Download report</button><button class="btn" id="cp">Copy analysis</button><button class="btn" id="again">Scan another offer</button></div></div></div></div></div></section>
+
+<section><div class="w"><div class="sh rv"><h2>Company identity check</h2><p>Domain checks use live DNS and RDAP lookups. Anything that cannot be confirmed stays Unavailable or Needs Review, never guessed.</p></div>
+<div class="card rv" style="max-width:720px"><div id="co"></div></div></div></section>
+
+<section id="db"><div class="w"><div class="sh rv"><h2>Scams reported. Communities protected.</h2><p>Sample content for demonstration. These are fictional entries, not real reports.</p></div>
+<div class="filters"><input type="text" id="q" placeholder="Search company, number or URL" aria-label="Search"><select id="cat" aria-label="Category"><option>All</option></select><button class="btn pri" id="rep">Report a scam</button></div><div class="grid g3" id="dbg"></div></div></section>
+
+<section id="features"><div class="w"><div class="sh rv"><h2>Built to catch what students miss.</h2></div><div class="grid g4" id="fg"></div></div></section>
+
+<section id="how"><div class="w"><div class="sh rv"><h2>Four steps from doubt to decision.</h2></div><div class="grid g4 steps" id="hg"></div></div></section>
+
+<section><div class="w"><div class="sh rv"><h2>Protecting India's next generation of professionals.</h2><p>Fake internships, fake recruiters and payment fraud target students first. Know the signs, protect your documents and report quickly.</p></div>
+<div class="grid g2"><div class="card rv"><h3>What to watch for</h3><p class="mu" style="margin-top:8px">Fees before an interview. Offers with no interview at all. Requests for Aadhaar, PAN or bank details early. Recruiters who only use Gmail, Telegram or WhatsApp.</p></div>
+<div class="card sos rv"><h3>If you already paid</h3><b>1930</b><p class="mu">Report suspected financial fraud promptly through official channels.</p><p style="margin-top:10px"><a href="https://cybercrime.gov.in" target="_blank" rel="noopener">National Cyber Crime Portal: cybercrime.gov.in</a></p></div></div></div></section>
+
+<section id="about"><div class="w"><div class="sh rv"><h2>About ProofKit</h2><p>ProofKit was created to help students and job seekers make informed decisions before trusting recruitment opportunities.</p></div>
+<div class="grid g3"><div class="card rv"><h3>Trust</h3><p class="mu">Every finding points to evidence in your message.</p></div><div class="card rv"><h3>Transparency</h3><p class="mu">We label demo output and never invent verification results.</p></div><div class="card rv"><h3>Protection</h3><p class="mu">Clear next steps and official reporting guidance.</p></div></div></div></section>
+
+<footer><div class="w"><div class="grid"><div><a class="logo" href="#home" style="margin-bottom:8px">PROOFKIT</a><p class="mu" style="font-size:.9rem;max-width:300px">AI-assisted scam detection for students and job seekers in India.</p><p style="margin-top:12px;font-weight:700">Verify first. Apply confidently.</p></div>
+<div><h4>Product</h4><a href="#scan">Scan an offer</a><a href="#db">Scam database</a><a href="#features">Features</a></div><div><h4>Resources</h4><a href="https://cybercrime.gov.in" target="_blank" rel="noopener">Report cybercrime</a><a href="#how">Safety guidelines</a></div><div><h4>Company</h4><a href="#about">About</a><a href="#" data-t="Privacy policy: your text stays in this browser in demo mode.">Privacy policy</a><a href="#" data-t="Contact: connect your own email here.">Contact</a></div></div><p class="mu" style="margin-top:30px;font-size:.8rem">© 2026 ProofKit. Hackathon prototype.</p></div></footer>
+
+<div class="modal" id="md" role="dialog" aria-modal="true"><div class="card"><h3>Report a scam</h3><label>Scam type</label><select id="rt"></select><label>Company or organization</label><input type="text" id="rc"><label>Suspicious contact (phone, email or URL)</label><input type="text" id="rx"><label>Description</label><textarea id="rd" style="min-height:90px"></textarea><label>Evidence (optional)</label><input type="file" id="re" accept="image/*,.pdf"><div class="row" style="justify-content:flex-end"><button class="btn" id="rcx">Cancel</button><button class="btn pri" id="rsb">Submit report</button></div></div></div>
+<div id="toasts" aria-live="polite"></div>
+
+<script>
+const API_BASE_URL="http://localhost:8090"; // set to your Spring Boot server
+/* ---------- API layer (no UI code) ---------- */
+const api={
+ async _f(p,o){const r=await fetch(API_BASE_URL+p,o);if(!r.ok){const e=new Error(r.status);e.status=r.status;throw e}return r.json()},
+ analyze:t=>api._f("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:t})}),
+ analyzeDocument:f=>{const d=new FormData();d.append("file",f);return api._f("/api/analyze/document",{method:"POST",body:d})},
+ analyzeUrl:u=>api._f("/api/analyze/url",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:u})}),
+ verifyCompany:(n,d)=>api._f("/api/companies/verify?name="+encodeURIComponent(n)+"&domain="+encodeURIComponent(d)),
+ scams:()=>api._f("/api/scams"),
+ report:d=>api._f("/api/scams/report",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)}),
+ login:d=>api._f("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)}),
+ register:d=>api._f("/api/auth/register",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)})
+};
+/* ---------- local demo engine ---------- */
+const RULES=[
+ {t:"Upfront payment requested",w:35,re:/(registration|processing|security|training|kit|refundable)?\s*(fee|deposit|charges?)[^.\n]{0,40}(₹|rs\.?|inr)\s?[\d,]+|(₹|rs\.?|inr)\s?[\d,]+[^.\n]{0,40}(fee|deposit|charges?)|\bpay\b[^.\n]{0,30}(₹|rs\.?|inr)/i,why:"Genuine employers do not charge candidates to hire or train them."},
+ {t:"Unofficial email address",w:20,re:/[\w.+-]+@(gmail|yahoo|outlook|hotmail|rediffmail)\.\w+/i,why:"Real recruiters normally write from a company domain, not a free email service."},
+ {t:"Urgent deadline pressure",w:15,re:/(within|in)\s+\d+\s*(hours?|hrs?|minutes?)|immediately|urgent|last chance|today only|limited (seats|slots)/i,why:"Pressure to act fast stops you from checking. Scammers rely on this."},
+ {t:"Chat-app only contact",w:10,re:/telegram|whatsapp|t\.me\//i,why:"Moving to chat apps keeps the conversation off official channels."},
+ {t:"Unrealistic pay or guarantees",w:10,re:/guaranteed|no interview|without interview|₹\s?\d{2,3},?\d{3}\s*(per|\/)\s*(day|week)|earn\s+(₹|rs\.?)\s?[\d,]+\s*(per|\/)\s*day|work from home/i,why:"Very high pay for little effort, or no interview, is a classic bait."},
+ {t:"Sensitive documents requested early",w:10,re:/aadhaar|aadhar|pan card|bank (account|details)|otp|passport/i,why:"Sharing ID or bank details before a verified offer risks identity theft."}];
+function localAnalyze(text){
+ const flags=[];let score=0;
+ RULES.forEach(r=>{const m=text.match(r.re);if(m){flags.push({title:r.t,why:r.why,evidence:m[0].trim()});score+=r.w}});
+ if(/congratulations|you (are|have been) selected/i.test(text)&&!/interview/i.test(text)){flags.push({title:"Selected without an interview",why:"A genuine offer almost always follows an interview or assessment.",evidence:(text.match(/congratulations[^.!]*|you (are|have been) selected[^.!]*/i)||[""])[0]});score+=10}
+ score=Math.min(score,100);
+ const BR={infosys:"infosys.com",tcs:"tcs.com",wipro:"wipro.com",accenture:"accenture.com",google:"google.com",amazon:"amazon.com",cognizant:"cognizant.com",capgemini:"capgemini.com",deloitte:"deloitte.com",flipkart:"flipkart.com",zomato:"zomato.com"},e0=(text.match(/[\w.+-]+@([\w-]+\.[\w.]+)/)||[])[1]||"";
+ for(const b in BR)if(e0&&new RegExp("\\b"+b+"\\b","i").test(text)&&!e0.toLowerCase().endsWith(BR[b])){flags.push({title:"Possible brand impersonation",why:"The offer names "+b+" but the email domain is not its official domain ("+BR[b]+").",evidence:e0});score+=25;break}
+ score=Math.min(score,100);const cls=score>=60?"LIKELY SCAM":score>=30?"SUSPICIOUS":"NO STRONG RED FLAGS";
+ const em=(text.match(/[\w.+-]+@([\w-]+\.[\w.]+)/)||[])[1]||"";
+ const nm=(text.match(/\b(?:at|with|from|join)\s+([A-Z][\w&]+(?:\s[A-Z][\w&]+){0,3})/)||[])[1]||"";
+ return{score,cls,flags,company:nm,domain:em,demo:true,summary:flags.length?flags.length+" warning sign"+(flags.length>1?"s":"")+" found by local pattern checks. Do not pay or share documents until the company is verified independently.":"Local checks found nothing unusual. That does not prove the offer is genuine. Verify the company on its official website."};
+}
+function urlAnalyze(u){
+ const flags=[];let score=0,x;try{x=new URL(u)}catch{return null}
+ const add=(t,w,why,e)=>{flags.push({title:t,why,evidence:e});score+=w};
+ if(x.protocol!=="https:")add("Connection is not HTTPS",25,"Legitimate hiring sites protect candidate data with HTTPS.",x.protocol);
+ if(/^\d+\.\d+\.\d+\.\d+$/.test(x.hostname))add("IP address instead of a domain name",35,"Companies rarely host careers pages on raw IP addresses.",x.hostname);
+ if(/\.(xyz|top|click|work|buzz|tk|gq|ml)$/i.test(x.hostname))add("Uncommon domain ending",20,"These endings are frequently used for throwaway scam sites.",x.hostname);
+ if(/bit\.ly|tinyurl|t\.co|cutt\.ly|rb\.gy/i.test(x.hostname))add("Shortened link hides the destination",25,"You cannot see where it leads before clicking.",x.hostname);
+ if((x.hostname.match(/-/g)||[]).length>=3)add("Many hyphens in the domain",15,"Look-alike domains often chain several words with hyphens.",x.hostname);
+ score=Math.min(score,100);
+ return{score,cls:score>=60?"LIKELY SCAM":score>=30?"SUSPICIOUS":"NO STRONG RED FLAGS",flags,company:"",domain:x.hostname,demo:true,summary:"URL structure checked locally. Domain age, ownership and content were not looked up in demo mode."};
+}
+const ld=u=>new Promise((o,e)=>{const t=document.createElement("script");t.src=u;t.onload=o;t.onerror=e;document.head.append(t)});
+async function readFile(f){const C="https://cdnjs.cloudflare.com/ajax/libs/";
+ if(/\.pdf$/i.test(f.name)){await ld(C+"pdf.js/3.11.174/pdf.min.js");pdfjsLib.GlobalWorkerOptions.workerSrc=C+"pdf.js/3.11.174/pdf.worker.min.js";const d=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;let t="";for(let i=1;i<=Math.min(d.numPages,4);i++)t+=(await(await d.getPage(i)).getTextContent()).items.map(x=>x.str).join(" ")+"\n";return t}
+ await ld(C+"tesseract.js/5.0.5/tesseract.min.js");return(await Tesseract.recognize(f,"eng")).data.text}
+async function lookupDomain(d){const o={exists:null,mx:null,age:null,https:null},g=async t=>(await fetch("https://dns.google/resolve?name="+d+"&type="+t)).json();
+ try{const j=await g("A");o.exists=j.Status===0&&!!j.Answer}catch{}
+ try{const j=await g("MX");o.mx=!!j.Answer}catch{}
+ try{const j=await(await fetch("https://rdap.org/domain/"+d)).json(),v=(j.events||[]).find(e=>e.eventAction==="registration");if(v)o.age=Math.floor((Date.now()-new Date(v.eventDate))/864e5)}catch{}
+ try{await fetch("https://"+d,{mode:"no-cors"});o.https=true}catch{o.https=false}
+ return o}
+async function run(kind,payload){
+ try{const r=await api[kind==="url"?"analyzeUrl":kind==="doc"?"analyzeDocument":"analyze"](payload);r.demo=false;return r}
+ catch{if(kind==="doc"){try{const t=await readFile(payload);if(t.trim().length<20)return null;msg.value=t.trim().slice(0,3000);msg.oninput();return localAnalyze(t)}catch{return null}}return kind==="url"?urlAnalyze(payload):localAnalyze(payload)}
+}
+/* ---------- UI helpers ---------- */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const IC={shield:"M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM9 12l2 2 4-4",globe:"M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18",link:"M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1",file:"M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM14 3v5h5M9 13h6M9 17h6",users:"M16 20v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 10a3 3 0 100-6 3 3 0 000 6M22 20v-2a4 4 0 00-3-3.9M16 4.1a3 3 0 010 5.8",chart:"M4 20V4M4 20h16M8 16v-5M13 16V8M18 16v-9",phone:"M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2",cap:"M2 9l10-5 10 5-10 5zM6 11v5c3 2 9 2 12 0v-5",warn:"M12 3l10 18H2zM12 10v5M12 18h.01",ok:"M5 12l5 5 9-10",eye:"M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 9a3 3 0 100 6 3 3 0 000-6",camera:"M4 7h3l2-3h6l2 3h3v12H4zM12 10a3.5 3.5 0 100 7 3.5 3.5 0 000-7",clock:"M12 3a9 9 0 100 18 9 9 0 000-18zM12 7v5l3 2",lock:"M6 11h12v9H6zM8 11V8a4 4 0 018 0v3"};
+const ic=n=>`<svg class="i" viewBox="0 0 24 24"><path d="${IC[n]}"/></svg>`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;$("#toasts").append(t);setTimeout(()=>t.remove(),3800)}
+$$("[data-t]").forEach(e=>e.onclick=ev=>{ev.preventDefault();toast(e.dataset.t)});
+$("#bg").onclick=()=>{const o=$("#links").classList.toggle("on");$("#bg").setAttribute("aria-expanded",o)};
+$$("#links a").forEach(a=>a.addEventListener("click",()=>$("#links").classList.remove("on")));
+/* ---------- accounts: login + create account (separate pages via #login / #signup) ---------- */
+/* Backend contract: POST /api/auth/login {email,password}, POST /api/auth/register {name,email,password}
+   -> {name,email,token}. 401/403 = bad credentials, 409 = email exists. If the server is offline,
+   a browser-only DEMO store is used (hashed in localStorage; NOT real security). */
+const PK={
+ user(){try{return JSON.parse(localStorage.getItem("pk_s")||sessionStorage.getItem("pk_s"))}catch{return null}},
+ save(u,rem){try{(rem?localStorage:sessionStorage).setItem("pk_s",JSON.stringify(u))}catch{}},
+ clear(){try{localStorage.removeItem("pk_s");sessionStorage.removeItem("pk_s")}catch{}},
+ users(){try{return JSON.parse(localStorage.getItem("pk_u")||"{}")}catch{return{}}},
+ async hash(p){if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("pk:"+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}return"x"+btoa(unescape(encodeURIComponent(p)))},
+ async login(email,pw,rem){email=email.trim().toLowerCase();let u;
+  try{u=await api.login({email,password:pw})}
+  catch(e){if(e.status)throw new Error(e.status===401||e.status===403?"Incorrect email or password.":"Server error. Please try again.");
+   const r=PK.users()[email];if(!r||r.h!==await PK.hash(pw))throw new Error("Incorrect email or password.");u={name:r.name,email}}
+  PK.save({name:u.name||u.fullName||u.email||email,email:u.email||email,token:u.token||null},rem)},
+ async register(name,email,pw){email=email.trim().toLowerCase();
+  try{await api.register({name,email,password:pw})}
+  catch(e){if(e.status)throw new Error(e.status===409?"An account with this email already exists.":"Server error. Please try again.");
+   const U=PK.users();if(U[email])throw new Error("An account with this email already exists.");
+   U[email]={name,h:await PK.hash(pw)};try{localStorage.setItem("pk_u",JSON.stringify(U))}catch{throw new Error("Browser storage is blocked.")}}},
+ strength(p){let s=0;if(p.length>=8)s++;if(p.length>=12)s++;if(/[a-z]/.test(p)&&/[A-Z]/.test(p))s++;if(/\d/.test(p))s++;if(/[^\w\s]/.test(p))s++;return s},
+ msg(id,t,k){const m=$("#"+id);m.textContent=t||"";m.className="amsg"+(t?" on "+k:"")},
+ bad(id,t){$("#"+id).classList.toggle("bad",!!t);$("#e-"+id).textContent=t||"";return!t},
+ nav(){const el=$("#na"),u=PK.user(),g=$("#gp");el.textContent="";
+  if(u){const s=document.createElement("span");s.className="mu";const displayName=String(u.name||u.fullName||u.email||"User").trim()||"User";s.textContent="Hi, "+displayName.split(/\s+/)[0];const b=document.createElement("button");b.className="btn";b.textContent="Logout";b.onclick=()=>{PK.clear();PK.nav();location.hash="home";toast("You have been logged out.")};el.append(s,b);g.textContent="Scan an offer";g.setAttribute("href","#scan")}
+  else{el.innerHTML='<a class="btn" href="#login">Login</a>';g.textContent="Get Protected";g.setAttribute("href","#signup")}}
+};
+$$("[data-pw]").forEach(b=>b.onclick=()=>{const i=b.previousElementSibling,h=i.type==="password";i.type=h?"text":"password";b.textContent=h?"Hide":"Show"});
+$("#s-pw").oninput=()=>{const s=PK.strength($("#s-pw").value),m=$("#s-mt");m.style.width=s*20+"%";m.style.background=s<=2?"var(--rd)":s<=3?"var(--am)":"var(--gn)"};
+const EM=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+$("#lf").onsubmit=async e=>{e.preventDefault();PK.msg("l-msg","");const em=$("#l-em").value.trim(),pw=$("#l-pw").value;
+ const a=PK.bad("l-em",EM.test(em)?"":"Enter a valid email."),b=PK.bad("l-pw",pw?"":"Enter your password.");if(!a||!b)return;
+ const g=$("#l-go");g.disabled=true;g.textContent="Signing in...";
+ try{await PK.login(em,pw,$("#l-rm").checked);$("#lf").reset();PK.nav();location.hash="scan";toast("Welcome back!")}
+ catch(x){PK.msg("l-msg",x.message,"e")}g.disabled=false;g.textContent="Login"};
+$("#sf").onsubmit=async e=>{e.preventDefault();PK.msg("s-msg","");const nm=$("#s-nm").value.trim(),em=$("#s-em").value.trim(),pw=$("#s-pw").value,tc=$("#s-tc").checked;
+ $("#e-s-tc").textContent=tc?"":"Please tick this box to continue.";
+ const ok=[PK.bad("s-nm",nm.length>=2?"":"Enter your full name."),PK.bad("s-em",EM.test(em)?"":"Enter a valid email."),
+  PK.bad("s-pw",pw.length>=8&&/[a-zA-Z]/.test(pw)&&/\d/.test(pw)?"":"Use 8+ characters with a letter and a number."),
+  PK.bad("s-pc",$("#s-pc").value===pw?"":"Passwords do not match."),tc];if(ok.includes(false))return;
+ const g=$("#s-go");g.disabled=true;g.textContent="Creating...";
+ try{await PK.register(nm,em,pw);$("#sf").reset();$("#s-mt").style.width=0;location.hash="login";PK.msg("l-msg","Account created. Please login.","o")}
+ catch(x){PK.msg("s-msg",x.message,"e")}g.disabled=false;g.textContent="Create account"};
+/* page router: #login and #signup show their own page, everything else shows the main site */
+$$("body>header,body>section,body>footer,body>.w").forEach(e=>e.classList.add("home"));
+function route(){const h=location.hash.slice(1),p=h==="login"||h==="signup"?h:null;
+ if(p&&PK.user()){location.hash="home";return}
+ document.body.classList.toggle("auth",!!p);$$(".authpage").forEach(x=>x.classList.toggle("on",x.id==="pg-"+p));
+ document.title=p?(p==="login"?"Login":"Create account")+" · ProofKit":"ProofKit — Verify the offer before you trust it";
+ if(p)scrollTo(0,0);else if(h)setTimeout(()=>{const t=document.getElementById(h);t&&t.scrollIntoView()},0)}
+addEventListener("hashchange",route);PK.nav();route();
+/* content */
+const FEATS=[["shield","AI-powered scam analysis","Reads the message and explains each warning sign."],["globe","Company identity check","Compares claimed company, website and email domain."],["link","Suspicious domain detection","Flags look-alike, shortened and unusual links."],["file","Offer letter analysis","Upload a letter and review it against known scam patterns."],["users","Community scam intelligence","See what others have already reported."],["chart","Evidence-based risk reports","Every flag quotes the exact text behind it."],["phone","Cybercrime reporting guidance","Clear steps for cybercrime.gov.in and 1930."],["cap","Student protection","Written for first-time job seekers and interns."],["eye","Brand impersonation check","Flags offers that name TCS, Infosys or Amazon but use another email domain."],["camera","Photo and PDF reading","Reads text from offer-letter photos and PDFs in your browser."],["clock","Live domain age and DNS","Looks up how old a domain is and whether it really exists."],["lock","Private in demo mode","Your text is analysed in your browser, not uploaded."]];
+$("#fg").innerHTML=FEATS.map(f=>`<div class="card feat rv"><div class="ic">${ic(f[0])}</div><h3>${f[1]}</h3><p>${f[2]}</p></div>`).join("");
+$("#hg").innerHTML=[["Submit","Paste your message, upload an offer letter or submit a job URL."],["Investigate","ProofKit checks suspicious patterns and available verification sources."],["Analyze","The risk engine evaluates the evidence and identifies potential red flags."],["Protect","Get a clear risk report and recommended next steps."]].map(s=>`<div class="step rv"><h3>${s[0]}</h3><p>${s[1]}</p></div>`).join("");
+let DB=[["Fake internship fee","TechNova Solutions (sample)","+91 90000 00001","Registration fee before joining","Internship"],["Work-from-home typing job","QuickEarn Hub (sample)","earnfast-jobs.example","Pay a kit deposit to start","Work from home"],["Fake HR offer letter","Global Infotech Ltd (sample)","hr.globalinfotech@gmail.example","Offer with no interview, asks for Aadhaar","Offer letter"],["Telegram task scam","DailyTasks India (sample)","t.me/example-tasks","Small tasks, then asks you to deposit","Payment fraud"],["Visa and abroad job","SkyHire Abroad (sample)","+91 90000 00002","Guaranteed overseas job for a fee","Recruitment"],["Fake bank KYC job call","SecureBank Careers (sample)","+91 90000 00003","Asks for OTP to 'confirm your job'","Payment fraud"]].map((d,i)=>({t:d[0],c:d[1],x:d[2],d:d[3],k:d[4],n:[128,94,61,203,47,89][i]}));
+const CATS=[...new Set(DB.map(d=>d.k))];
+$("#cat").innerHTML+=CATS.map(c=>`<option>${c}</option>`).join("");$("#rt").innerHTML=CATS.map(c=>`<option>${c}</option>`).join("");
+function drawDB(){const q=$("#q").value.toLowerCase(),c=$("#cat").value;const l=DB.filter(d=>(c==="All"||d.k===c)&&(d.t+d.c+d.x+d.d).toLowerCase().includes(q));
+ $("#dbg").innerHTML=l.length?l.map(d=>`<div class="card sc"><span class="tag">${esc(d.k)}</span><h3 style="margin-top:10px">${esc(d.t)}</h3><p class="mu" style="font-size:.88rem">${esc(d.c)}</p><code>${esc(d.x)}</code><p class="mu" style="font-size:.85rem">${esc(d.d)}</p><p class="cnt" style="margin-top:8px">${d.n} community reports (sample)</p></div>`).join(""):`<div class="card mu">No reports match. Try another search, or report a scam.</div>`}
+$("#q").oninput=drawDB;$("#cat").onchange=drawDB;drawDB();
+(async()=>{try{const s=await api.scams();if(Array.isArray(s)&&s.length){DB=s;drawDB()}}catch{}})();
+/* report modal */
+const md=$("#md");$("#rep").onclick=()=>{md.classList.add("on");$("#rc").focus()};$("#rcx").onclick=()=>md.classList.remove("on");md.onclick=e=>{if(e.target===md)md.classList.remove("on")};document.onkeydown=e=>{if(e.key==="Escape")md.classList.remove("on")};
+$("#rsb").onclick=async()=>{const c=$("#rc").value.trim(),x=$("#rx").value.trim(),d=$("#rd").value.trim();
+ if(!c||!x||!d)return toast("Fill in company, contact and description first.");
+ const rec={t:$("#rt").value+" report",c,x,d,k:$("#rt").value,n:1};
+ try{await api.report({type:$("#rt").value,company:c,contact:x,description:d});toast("Report submitted. Thank you.")}catch{DB.unshift(rec);drawDB();toast("Backend not connected. Report added locally for this session only.")}
+ md.classList.remove("on");["#rc","#rx","#rd"].forEach(s=>$(s).value="")};
+/* tabs & inputs */
+$$(".tabs button").forEach(b=>b.onclick=()=>{$$(".tabs button").forEach(x=>x.classList.toggle("on",x===b));["m","f","u"].forEach(k=>$("#t"+k).classList.toggle("hide",k!==b.dataset.tab))});
+const msg=$("#msg");msg.oninput=()=>$("#cc").textContent=msg.value.length+" / 3000";
+$("#clr").onclick=()=>{msg.value="";msg.oninput();msg.focus()};
+$("#sample").onclick=()=>{msg.value="Congratulations! You have been selected for a Data Analyst internship at TechNova Solutions. No interview needed, earn ₹25,000 per week from home. To confirm your seat, pay a refundable registration fee of ₹1,999 within 24 hours. Send your Aadhaar and PAN card on WhatsApp. Contact hr.technova@gmail.com";msg.oninput();toast("Sample scam loaded. Click Analyze offer.")};
+let FILE=null;const file=$("#file"),drop=$("#drop");
+drop.onclick=()=>file.click();drop.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();file.click()}};
+["dragover","dragenter"].forEach(v=>drop.addEventListener(v,e=>{e.preventDefault();drop.classList.add("dg")}));["dragleave","drop"].forEach(v=>drop.addEventListener(v,e=>{e.preventDefault();drop.classList.remove("dg")}));
+drop.addEventListener("drop",e=>pick(e.dataTransfer.files[0]));file.onchange=()=>pick(file.files[0]);
+function pick(f){if(!f)return;if(!/\.(pdf|png|jpe?g)$/i.test(f.name))return toast("Unsupported file. Use PDF, PNG or JPG.");if(f.size>5242880)return toast("File is larger than 5 MB.");
+ FILE=f;$("#fn").textContent=f.name+" ("+Math.ceil(f.size/1024)+" KB)";const b=$("#ub");b.classList.remove("hide");let p=0;const i=setInterval(()=>{p+=12+Math.random()*18;b.firstElementChild.style.width=Math.min(p,100)+"%";if(p>=100){clearInterval(i);toast("File ready.")}},120)}
+/* analysis flow */
+const STG=["Reading submitted content","Detecting suspicious phrases","Checking contact information","Examining payment requests","Preparing risk assessment"];
+let LAST=null;
+async function analyze(kind,payload){
+ $("#out").classList.add("hide");$("#sc").classList.remove("hide");const ul=$("#stg");ul.innerHTML=STG.map((s,i)=>`<li id="s${i}">${ic("ok")}${s}</li>`).join("");
+ const job=run(kind,payload);
+ for(let i=0;i<STG.length;i++){$("#s"+i).className="on";await new Promise(r=>setTimeout(r,520));$("#s"+i).className="ok"}
+ const r=await job;$("#sc").classList.add("hide");
+ if(!r)return toast("Could not read text from this file. Try a clearer image, or paste the text.");
+ show(r)}
+function show(r){LAST=r;const col=r.score>=60?"var(--rd)":r.score>=30?"var(--am)":"var(--gn)",pc=r.score>=60?"p-r":r.score>=30?"p-a":"p-g";
+ $("#out").classList.remove("hide");$("#arc").style.stroke=col;$("#cl").className="pill "+pc;$("#cl").textContent=r.cls;
+ $("#rs").textContent=r.flags.length+" red flag"+(r.flags.length===1?"":"s")+" detected";$("#rsum").textContent=r.summary;
+ $("#flags").innerHTML=r.flags.length?r.flags.map((f,i)=>`<details ${i===0?"open":""}><summary>${ic("warn")}${esc(f.title)}</summary><div>${esc(f.why)}<q>Evidence: ${esc(f.evidence)}</q></div></details>`).join(""):`<p class="mu">No red flags found by the local checks.</p>`;
+ $(".demo",$("#out")).style.display=r.demo?"":"none";
+ let n=0;const sn=$("#sn"),t=setInterval(()=>{n=Math.min(n+2,r.score);sn.textContent=n;if(n>=r.score)clearInterval(t)},18);
+ $("#arc").style.strokeDashoffset=528;requestAnimationFrame(()=>requestAnimationFrame(()=>$("#arc").style.strokeDashoffset=528*(1-r.score/100)));
+ company(r);$("#out").scrollIntoView({behavior:"smooth",block:"start"})}
+async function company(r){const D=r.domain||"",gen=/^(gmail|yahoo|outlook|hotmail|rediffmail)\./i.test(D);let L={};
+ const rows=()=>{const a=L.age;return[["Company name",r.company?esc(r.company):"Not stated in message",r.company?"Needs Review":"Unavailable"],["Email or link domain",esc(D||"None found"),D?(gen?"Mismatch":"Needs Review"):"Unavailable"],["Domain belongs to a company",gen?"Free email service, not a company domain":"Not confirmed",gen?"Mismatch":"Unavailable"],["Domain exists (live DNS)",L.exists==null?"Not checked":L.exists?"Resolves in DNS":"Does not resolve",L.exists==null?"Unavailable":L.exists?"Verified":"Mismatch"],["Mail server (MX)",L.mx==null?"Not checked":L.mx?"Has mail records":"No mail records",L.mx==null?"Unavailable":L.mx?"Verified":"Needs Review"],["Domain registration age",a==null?"Not available":a<180?a+" days old, very new":(a/365).toFixed(1)+" years old",a==null?"Unavailable":a<180?"Needs Review":"Verified"],["HTTPS site responds",L.https==null?"Not checked":L.https?"Responds over HTTPS":"No HTTPS response",L.https==null?"Unavailable":L.https?"Verified":"Needs Review"]]};
+ const draw=()=>$("#co").innerHTML=rows().map(x=>`<div class="vr"><span>${x[0]}</span><span>${x[1]} <span class="st ${x[2].replace(" ","")}">${x[2]}</span></span></div>`).join("");
+ draw();if(D&&!gen&&D.includes(".")){L=await lookupDomain(D);draw()}}
+company({company:"",domain:""});
+$("#go").onclick=()=>{const v=msg.value.trim();if(v.length<20)return toast("Paste at least a few sentences of the offer.");analyze("text",v)};
+$("#gof").onclick=()=>{if(!FILE)return toast("Choose a file first.");analyze("doc",FILE)};
+$("#gou").onclick=()=>{const v=$("#url").value.trim();if(!/^https?:\/\/.+\..+/i.test(v))return toast("Enter a full URL starting with http:// or https://");analyze("url",v)};
+function reportText(){const r=LAST;return`PROOFKIT REPORT (${r.demo?"DEMO, local pattern checks only":"backend analysis"})\nRisk score: ${r.score}/100\nClassification: ${r.cls}\n\n${r.summary}\n\nRed flags:\n`+r.flags.map((f,i)=>`${i+1}. ${f.title}\n   ${f.why}\n   Evidence: ${f.evidence}`).join("\n")+"\n\nIf you paid money, call 1930 or report at https://cybercrime.gov.in\n"}
+$("#dl").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([reportText()],{type:"text/plain"}));a.download="proofkit-report.txt";a.click();toast("Report downloaded.")};
+$("#cp").onclick=async()=>{try{await navigator.clipboard.writeText(reportText());toast("Analysis copied.")}catch{toast("Copy blocked by the browser. Use Download instead.")}};
+$("#again").onclick=()=>{$("#out").classList.add("hide");msg.value="";msg.oninput();company({company:"",domain:""});$("#scan").scrollIntoView({behavior:"smooth"})};
+/* backend status */
+fetch(API_BASE_URL+"/api/scams",{method:"GET"}).then(r=>{if(r.ok)$("#demoTag").innerHTML="Backend connected."}).catch(()=>{});
+$("#mqi").innerHTML=["Fake internship fees","Work-from-home typing jobs","Telegram task scams","Fake offer letters","Look-alike company domains","Overseas job promises","KYC and OTP calls"].map(t=>`<span>${t}</span>`).join("").repeat(2);
+const lt=$(".letter");$(".vis").onmousemove=e=>{const b=e.currentTarget.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;lt.style.transform=`rotate(-3deg) rotateY(${x*16}deg) rotateX(${-y*16}deg)`};$(".vis").onmouseleave=()=>lt.style.transform="";
+/* reveal + counters */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});$$(".rv").forEach(e=>io.observe(e));
+$$("[data-n]").forEach(e=>{const T=+e.dataset.n;let n=0;const t=setInterval(()=>{n=Math.min(n+Math.ceil(T/40),T);e.textContent=n.toLocaleString("en-IN");if(n>=T)clearInterval(t)},30)});
+</script></body></html>
